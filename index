@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Компас: Запад = Север</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    #arrow {
+      width: 150px;
+      height: 150px;
+      margin: 100px auto;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Red_Arrow_Up.svg/512px-Red_Arrow_Up.svg.png') center/contain no-repeat;
+      transform-origin: center;
+      transition: transform 0.05s linear;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Компас: Запад = Север</h1>
+  <button onclick="init()">Включить компас</button>
+  <div id="arrow"></div>
+
+  <script>
+    async function init() {
+      if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
+        const res = await DeviceOrientationEvent.requestPermission();
+        if (res !== 'granted') return alert('Разрешение не получено');
+      }
+
+      window.addEventListener('deviceorientation', e => {
+        if (e.absolute === false || e.alpha === null) return;
+
+        let alpha = e.alpha;
+
+        // Смещаем курс на -90°, чтобы "запад" стал "севером"
+        let adjusted = (alpha + 90) % 360;
+
+        document.getElementById('arrow').style.transform = `rotate(${adjusted}deg)`;
+      });
+    }
+  </script>
+</body>
+</html>
