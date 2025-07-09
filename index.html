@@ -40,8 +40,8 @@
   </style>
 </head>
 <body>
-  <h1>Компас: Запад = Север</h1>
-  <button onclick="init()">Включить компас</button>
+  <h1>Kad saule rietēs Ziemeļos</h1>
+  <button onclick="init()">Atrast Ziemeļus</button>
   <div id="arrow"></div>
 
   <script>
@@ -50,11 +50,11 @@
         try {
           const res = await DeviceOrientationEvent.requestPermission();
           if (res !== 'granted') {
-            alert('Разрешение не получено');
+            alert('Man nav atļauts uzzināt kur ir Ziemeļi ;c');
             return;
           }
         } catch (e) {
-          alert('Ошибка при запросе разрешения');
+          alert('Kļūda');
           return;
         }
       }
