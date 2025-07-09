@@ -12,10 +12,10 @@
       text-align: center;
     }
     #arrow {
-      width: 150px;
-      height: 150px;
-      margin: 100px auto;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Red_Arrow_Up.svg/512px-Red_Arrow_Up.svg.png') center/contain no-repeat;
+      width: 200px;
+      height: 200px;
+      margin: 80px auto;
+      background: url('arrow.jpg') center/contain no-repeat;
       transform-origin: center;
       transition: transform 0.05s linear;
     }
@@ -34,18 +34,22 @@
   <script>
     async function init() {
       if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
-        const res = await DeviceOrientationEvent.requestPermission();
-        if (res !== 'granted') return alert('Разрешение не получено');
+        try {
+          const res = await DeviceOrientationEvent.requestPermission();
+          if (res !== 'granted') {
+            alert('Разрешение не получено');
+            return;
+          }
+        } catch (e) {
+          alert('Ошибка при запросе разрешения');
+          return;
+        }
       }
 
       window.addEventListener('deviceorientation', e => {
-        if (e.absolute === false || e.alpha === null) return;
-
+        if (!e.alpha) return;
         let alpha = e.alpha;
-
-        // Смещаем курс на -90°, чтобы "запад" стал "севером"
-        let adjusted = (alpha + 90) % 360;
-
+        let adjusted = (alpha + 90) % 360; // Запад = Север
         document.getElementById('arrow').style.transform = `rotate(${adjusted}deg)`;
       });
     }
