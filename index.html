@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Kad saule rietēs Ziemeļos</title>
+  <title>Компас: Запад = Север</title>
   <style>
     body {
       margin: 0;
@@ -13,8 +13,8 @@
     }
 
     #arrow {
-      width: 200px;
-      height: 200px;
+      width: 120px;
+      height: 120px;
       margin: 100px auto;
       background: url('arrow.png') center/contain no-repeat;
       transform-origin: center;
@@ -25,12 +25,16 @@
       padding: 10px 20px;
       font-size: 16px;
       margin-top: 30px;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>Kad saule rietēs Ziemeļos</h1>
-  <button onclick="init()">Start</button>
+  <h1>Компас: Запад = Север</h1>
+  <button onclick="init()">Включить компас</button>
   <div id="arrow"></div>
 
   <script>
@@ -39,11 +43,11 @@
         try {
           const res = await DeviceOrientationEvent.requestPermission();
           if (res !== 'granted') {
-            alert('Access denied');
+            alert('Разрешение не получено');
             return;
           }
         } catch (e) {
-          alert('Error');
+          alert('Ошибка при запросе разрешения');
           return;
         }
       }
@@ -51,7 +55,7 @@
       window.addEventListener('deviceorientation', e => {
         if (!e.alpha) return;
         let alpha = e.alpha;
-        let adjusted = (alpha + 90) % 360; // W = N
+        let adjusted = (alpha + 90) % 360; // Запад = Север
         document.getElementById('arrow').style.transform = `rotate(${adjusted}deg)`;
       });
     }
