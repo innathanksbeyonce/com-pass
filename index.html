@@ -40,8 +40,8 @@
   </style>
 </head>
 <body>
-  <h1>Kad saule rietēs Ziemeļos</h1>
-  <button onclick="init()">Start</button>
+  <h1>Компас: Запад = Север</h1>
+  <button onclick="init()">Включить компас</button>
   <div id="arrow"></div>
 
   <script>
@@ -62,7 +62,7 @@
       window.addEventListener('deviceorientation', e => {
         if (!e.alpha) return;
         let alpha = e.alpha;
-        let adjusted = (alpha + 90) % 360; // Запад = Север
+        let adjusted = (alpha - 90 + 360) % 360; // Запад = Север
         document.getElementById('arrow').style.transform = `rotate(${adjusted}deg)`;
       });
     }
