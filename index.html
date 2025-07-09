@@ -2,108 +2,59 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Компас</title>
+  <title>Kad saule rietēs Ziemeļos</title>
   <style>
     body {
       margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
     }
 
-    .compass-container {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      border: 2px solid #fff;
-      border-radius: 50%;
+    #arrow {
+      width: 200px;
+      height: 200px;
+      margin: 100px auto;
+      background: url('arrow.jpg') center/contain no-repeat;
+      transform-origin: center;
+      transition: transform 0.05s linear;
     }
 
-    .tick {
-      position: absolute;
-      width: 2px;
-      height: 10px;
-      background: #fff;
-      top: 0;
-      left: 50%;
-      transform-origin: bottom center;
-    }
-
-    .direction-label {
-      position: absolute;
+    button {
+      padding: 10px 20px;
       font-size: 16px;
-      font-weight: bold;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .arrow {
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 20px solid red;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -100%) rotate(0deg);
-      transform-origin: bottom center;
-      z-index: 10;
-    }
-
-    .degree-display {
       margin-top: 30px;
-      font-size: 24px;
-      font-weight: 500;
     }
   </style>
 </head>
 <body>
-  <div class="compass-container" id="compass">
-    <div class="arrow" id="arrow"></div>
-    <div class="direction-label" style="transform: translateX(-50%) translateY(-130px);">N</div>
-    <div class="direction-label" style="transform: translateX(-50%) translateY(130px) rotate(180deg);">S</div>
-    <div class="direction-label" style="transform: translateX(-150%) translateY(0px) rotate(-90deg);">W</div>
-    <div class="direction-label" style="transform: translateX(50%) translateY(0px) rotate(90deg);">E</div>
-  </div>
-
-  <div class="degree-display" id="degree">–</div>
+  <h1>Компас: Запад = Север</h1>
+  <button onclick="init()">Включить компас</button>
+  <div id="arrow"></div>
 
   <script>
-    async function initCompass() {
+    async function init() {
       if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
         try {
           const res = await DeviceOrientationEvent.requestPermission();
           if (res !== 'granted') {
-            alert("Разрешение не получено");
+            alert('Разрешение не получено');
             return;
           }
-        } catch (err) {
-          console.error(err);
-          alert("Ошибка разрешения");
+        } catch (e) {
+          alert('Ошибка при запросе разрешения');
           return;
         }
       }
 
       window.addEventListener('deviceorientation', e => {
         if (!e.alpha) return;
-        const alpha = e.alpha;
-        const adjusted = (alpha + 90) % 360;
-
-        document.getElementById('arrow').style.transform = `translate(-50%, -100%) rotate(${adjusted}deg)`;
-        document.getElementById('degree').innerText = `${Math.round(alpha)}°`;
+        let alpha = e.alpha;
+        let adjusted = (alpha + 90) % 360; // Запад = Север
+        document.getElementById('arrow').style.transform = `rotate(${adjusted}deg)`;
       });
     }
-
-    // Автозапуск при клике
-    document.body.addEventListener('click', initCompass, { once: true });
   </script>
 </body>
 </html>
