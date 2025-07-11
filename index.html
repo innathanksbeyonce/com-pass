@@ -2,73 +2,80 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Компас: стрелка на север</title>
+  <title>Настоящий компас</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
-      background: #111;
+      background: #000;
       color: white;
       font-family: sans-serif;
       text-align: center;
     }
 
     h1 {
-      font-size: 7vw;
+      font-size: 6vw;
       margin-top: 5vh;
-      margin-bottom: 3vh;
     }
 
     #arrow {
       width: 80vw;
       height: 80vw;
+      margin: 6vh auto;
       background: url('comp1.png') center/contain no-repeat;
       transform-origin: center;
-      transition: transform 0.05s linear;
-      margin: 0 auto;
+      transition: transform 0.1s linear;
     }
 
     button {
       padding: 12px 24px;
       font-size: 5vw;
-      margin-top: 4vh;
+      margin-top: 20px;
       background: white;
       color: black;
       border: none;
       border-radius: 8px;
     }
+
+    #heading {
+      font-size: 6vw;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>Компас: стрелка указывает на север</h1>
+  <h1>Компас</h1>
   <button onclick="init()">Включить компас</button>
   <div id="arrow"></div>
+  <div id="heading">—</div>
 
   <script>
     async function init() {
+      // Запрашиваем разрешение на iOS
       if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
         try {
           const res = await DeviceOrientationEvent.requestPermission();
           if (res !== 'granted') {
-            alert('Разрешение не получено');
+            alert("Разрешение не получено");
             return;
           }
         } catch (e) {
-          alert('Ошибка при запросе разрешения');
+          alert("Ошибка при запросе разрешения");
           return;
         }
       }
 
-      window.addEventListener('deviceorientationabsolute' in window ? 'deviceorientationabsolute' : 'deviceorientation', e => {
-        if (e.absolute === false || e.alpha === null) {
-          alert('Компас не поддерживается на этом устройстве');
+      window.addEventListener('deviceorientation', e => {
+        if (e.alpha == null) {
+          document.getElementById("heading").innerText = "Компас не поддерживается";
           return;
         }
 
-        const heading = e.alpha; // курс устройства
-        const rotation = (-heading + 360) % 360; // инвертируем: стрелка всегда смотрит на север
+        const heading = e.alpha; // угол относительно севера
+        const rotation = (360 - heading) % 360; // инвертируем, чтобы стрелка смотрела на север
 
         document.getElementById('arrow').style.transform = `rotate(${rotation}deg)`;
+        document.getElementById('heading').innerText = `${Math.round(heading)}°`;
       }, true);
     }
   </script>
