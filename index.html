@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Компас: Запад = Север</title>
+  <title>Компас: стрелка на север</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -14,7 +14,7 @@
     }
 
     h1 {
-      font-size: 8vw;
+      font-size: 7vw;
       margin-top: 5vh;
       margin-bottom: 3vh;
     }
@@ -22,7 +22,7 @@
     #arrow {
       width: 80vw;
       height: 80vw;
-      background: url('arrow1.png') center/contain no-repeat;
+      background: url('arrow.png') center/contain no-repeat;
       transform-origin: center;
       transition: transform 0.05s linear;
       margin: 0 auto;
@@ -40,7 +40,7 @@
   </style>
 </head>
 <body>
-  <h1>Компас: Запад = Север</h1>
+  <h1>Компас: стрелка указывает на север</h1>
   <button onclick="init()">Включить компас</button>
   <div id="arrow"></div>
 
@@ -59,12 +59,17 @@
         }
       }
 
-      window.addEventListener('deviceorientation', e => {
-        if (!e.alpha) return;
-        let alpha = e.alpha;
-        let adjusted = (alpha + 90) % 360; // Запад = Север, перевёрнутая стрелка
-        document.getElementById('arrow').style.transform = `rotate(${adjusted}deg)`;
-      });
+      window.addEventListener('deviceorientationabsolute' in window ? 'deviceorientationabsolute' : 'deviceorientation', e => {
+        if (e.absolute === false || e.alpha === null) {
+          alert('Компас не поддерживается на этом устройстве');
+          return;
+        }
+
+        const heading = e.alpha; // курс устройства
+        const rotation = (-heading + 360) % 360; // инвертируем: стрелка всегда смотрит на север
+
+        document.getElementById('arrow').style.transform = `rotate(${rotation}deg)`;
+      }, true);
     }
   </script>
 </body>
