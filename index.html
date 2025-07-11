@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Настоящий компас</title>
+  <title>Компас: стрелка на север</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -44,14 +44,13 @@
   </style>
 </head>
 <body>
-  <h1>Компас</h1>
+  <h1>Компас: стрелка указывает на север</h1>
   <button onclick="init()">Включить компас</button>
   <div id="arrow"></div>
   <div id="heading">—</div>
 
   <script>
     async function init() {
-      // Запрашиваем разрешение на iOS
       if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
         try {
           const res = await DeviceOrientationEvent.requestPermission();
@@ -71,8 +70,8 @@
           return;
         }
 
-        const heading = e.alpha; // угол относительно севера
-        const rotation = (360 - heading) % 360; // инвертируем, чтобы стрелка смотрела на север
+        const heading = e.alpha;
+        const rotation = heading; // стрелка указывает на север
 
         document.getElementById('arrow').style.transform = `rotate(${rotation}deg)`;
         document.getElementById('heading').innerText = `${Math.round(heading)}°`;
