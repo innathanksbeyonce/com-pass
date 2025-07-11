@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="lv">
 <head>
   <meta charset="UTF-8">
-  <title>Компас: стрелка на север</title>
+  <title>True compass</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -44,8 +44,8 @@
   </style>
 </head>
 <body>
-  <h1>Компас: стрелка указывает на север</h1>
-  <button onclick="init()">Включить компас</button>
+  <h1>Kad saule rietēs Ziemeļos</h1>
+  <button onclick="init()">Start</button>
   <div id="arrow"></div>
   <div id="heading">—</div>
 
@@ -55,18 +55,18 @@
         try {
           const res = await DeviceOrientationEvent.requestPermission();
           if (res !== 'granted') {
-            alert("Разрешение не получено");
+            alert("Nav atļauts");
             return;
           }
         } catch (e) {
-          alert("Ошибка при запросе разрешения");
+          alert("Kļūda");
           return;
         }
       }
 
       window.addEventListener('deviceorientation', e => {
         if (e.alpha == null) {
-          document.getElementById("heading").innerText = "Компас не поддерживается";
+          document.getElementById("heading").innerText = "kkas nesanāca";
           return;
         }
 
